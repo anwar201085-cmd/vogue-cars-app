@@ -28,18 +28,9 @@ workflows:
           java -version
           flutter --version
 
-      - name: Preparation and Clean
+      - name: Full Clean (Flutter + Gradle)
         script: |
           flutter clean
-          flutter pub get
-          chmod +x android/gradlew
-          cd android
-          ./gradlew clean --no-daemon
-          cd ..
 
-      - name: Build App Bundle
-        script: |
-          flutter build appbundle --release --no-tree-shake-icons
-
-    artifacts:
-      - build/app/outputs/bundle/release/*.aab
+          # Clear Gradle caches to avoid stale configs (AndroidX / old generated files)
+          rm -rf ~/.gradle/caches
