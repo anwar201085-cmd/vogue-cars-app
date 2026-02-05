@@ -99,7 +99,7 @@ class _CarsScreenState extends State<CarsScreen> {
   Widget _buildCarCard(Car car) {
     return Card(
       color: AppColors.surface,
-      margin: const EdgeInsets.bottom(16),
+      margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
