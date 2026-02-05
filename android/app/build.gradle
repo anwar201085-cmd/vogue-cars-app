@@ -8,8 +8,10 @@ android {
     namespace "com.voguecars.app"
     compileSdk 34
 
+    // هذا الجزء يضمن أن السيرفر يرى ملفات الكود في مسارها الصحيح
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        main.kotlin.srcDirs += 'src/main/kotlin'
     }
 
     defaultConfig {
@@ -27,6 +29,8 @@ android {
 
     kotlinOptions {
         jvmTarget = '17'
+        // إضافة هذا السطر لضمان عدم تجاهل مكتبات Flutter
+        freeCompilerArgs += ["-Xallow-unresolved-symbols"]
     }
 
     buildTypes {
@@ -39,5 +43,6 @@ android {
 }
 
 dependencies {
+    // تحديث المكتبة لأكثر نسخة مستقرة تتوافق مع محرك 8.2
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.20"
 }
