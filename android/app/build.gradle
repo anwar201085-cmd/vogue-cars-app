@@ -9,8 +9,8 @@ android {
     compileSdk 34
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-        main.java.srcDirs += 'src/main/java'
+        main.java.srcDirs += "src/main/kotlin"
+        main.java.srcDirs += "src/main/java"
     }
 
     defaultConfig {
@@ -21,13 +21,15 @@ android {
         versionName "1.0.0"
     }
 
+    // ✅ Force Java 17 for Java compilation
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
 
+    // ✅ Force Kotlin JVM target 17
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = "17"
     }
 
     buildTypes {
@@ -41,4 +43,21 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.20"
+}
+
+// ✅ ✅ FINAL ROOT FIX: Force Gradle tasks to use Java/Kotlin 17 even if any plugin overrides it
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_17.toString()
+    targetCompatibility = JavaVersion.VERSION_17.toString()
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+// ✅ Strongest fix: Kotlin JVM toolchain
+kotlin {
+    jvmToolchain(17)
 }
