@@ -41,7 +41,7 @@ class WarrantyScreen extends StatelessWidget {
           final plan = plans[index];
           return Card(
             color: AppColors.surface,
-            margin: const EdgeInsets.bottom(16),
+           margin: const EdgeInsets.only(bottom: 16),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16), side: const BorderSide(color: AppColors.accent, width: 0.5)),
             child: Padding(
               padding: const EdgeInsets.all(20),
