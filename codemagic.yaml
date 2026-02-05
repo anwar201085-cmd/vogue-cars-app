@@ -1,0 +1,13 @@
+workflows:
+  default-workflow:
+    name: Build Vogue Cars
+    environment:
+      flutter: stable
+      java: 17
+    scripts:
+      - name: Get Flutter dependencies
+        script: flutter pub get
+      - name: Build Android App Bundle
+        script: flutter build appbundle --release --no-sound-null-safety
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
