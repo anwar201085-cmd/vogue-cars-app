@@ -9,13 +9,22 @@ workflows:
       java: 17
       vars:
         CACHE_INVALIDATOR: 2
-        # Ensures Gradle uses Java 17 even if runner has multiple JDKs
-        GRADLE_OPTS: "-Dorg.gradle.java.home=$JAVA_HOME"
 
     scripts:
-      - name: Verify Environment (Java/Flutter)
+      - name: Verify & Fix Java (JDK 17)
         script: |
-          echo "JAVA_HOME=$JAVA_HOME"
+          echo "Before fix:"
+          which java || true
+          java -version || true
+          echo "JAVA_HOME(before)=$JAVA_HOME"
+
+          # Force JAVA_HOME to real JDK 17 on macOS runner
+          export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+          export PATH="$JAVA_HOME/bin:$PATH"
+
+          echo "After fix:"
+          echo "JAVA_HOME(after)=$JAVA_HOME"
+          which java
           java -version
           flutter --version
 
@@ -24,16 +33,7 @@ workflows:
           flutter clean
           flutter pub get
 
-          # Make sure gradlew is executable (mac runners sometimes need this)
           chmod +x android/gradlew
-
-          # Force Gradle to use Java 17 (hard pin)
-          mkdir -p android
-          cat >> android/gradle.properties <<'EOF'
-          org.gradle.jvmargs=-Xmx4096m -Dfile.encoding=UTF-8
-          kotlin.daemon.jvmargs=-Xmx2048m
-          org.gradle.java.home=${JAVA_HOME}
-          EOF
 
           cd android
           ./gradlew clean --no-daemon
