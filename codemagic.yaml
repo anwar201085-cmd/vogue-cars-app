@@ -1,13 +1,15 @@
 workflows:
-  default-workflow:
-    name: Build Vogue Cars
+  vogue-cars-workflow:
+    name: Vogue Cars Release
+    instance_type: mac_mini_m1
     environment:
-      flutter: stable
+      flutter: 3.24.0
       java: 17
     scripts:
-      - name: Get Flutter dependencies
-        script: flutter pub get
-      - name: Build Android App Bundle
-        script: flutter build appbundle --release --no-sound-null-safety
+      - name: Build App Bundle
+        script: | 
+          flutter clean
+          flutter pub get
+          flutter build appbundle --release --no-sound-null-safety
     artifacts:
       - build/app/outputs/bundle/release/*.aab
