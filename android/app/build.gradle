@@ -1,3 +1,9 @@
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -9,15 +15,9 @@ if (localPropertiesFile.exists()) {
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
 def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0.0'
 
-plugins {
-    id "com.android.application"
-    id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
-}
-
 android {
     namespace "com.voguecars.app"
-    compileSdk 34 // تم التحديث لضمان التوافق
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -42,13 +42,11 @@ android {
 
     buildTypes {
         release {
-            // إعدادات التوقيع سيتم التعامل معها بواسطة Codemagic
             signingConfig signingConfigs.debug
         }
     }
 }
 
 dependencies {
-    // تم حذف السطر القديم الذي كان يسبب تعارض مع إصدار Kotlin 1.9.0
     implementation platform('org.jetbrains.kotlin:kotlin-bom:1.9.0')
 }
