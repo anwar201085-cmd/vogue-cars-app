@@ -32,9 +32,7 @@ workflows:
         script: |
           flutter clean
           flutter pub get
-
           chmod +x android/gradlew
-
           cd android
           ./gradlew clean --no-daemon
           cd ..
