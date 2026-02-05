@@ -8,8 +8,7 @@ workflows:
     scripts:
       - name: Build App Bundle
         script: | 
-          flutter clean
           flutter pub get
-          flutter build appbundle --release --no-sound-null-safety
+          flutter build appbundle --release
     artifacts:
       - build/app/outputs/bundle/release/*.aab
