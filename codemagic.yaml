@@ -1,14 +1,25 @@
 workflows:
   vogue-cars-workflow:
-    name: Vogue Cars Release
+    name: Vogue Cars Final Build
     instance_type: mac_mini_m1
+    max_build_duration: 30
     environment:
       flutter: 3.24.0
       java: 17
+      vars:
+        CACHE_INVALIDATOR: 2
     scripts:
+      - name: Preparation and Clean
+        script: | 
+          rm -rf build
+          rm -rf .dart_tool
+          flutter clean
+          flutter pub get
+          cd android
+          ./gradlew clean
+          cd ..
       - name: Build App Bundle
         script: | 
-          flutter pub get
-          flutter build appbundle --release
+          flutter build appbundle --release --no-tree-shake-icons
     artifacts:
       - build/app/outputs/bundle/release/*.aab
