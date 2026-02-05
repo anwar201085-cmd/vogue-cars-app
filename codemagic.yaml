@@ -3,23 +3,45 @@ workflows:
     name: Vogue Cars Final Build
     instance_type: mac_mini_m1
     max_build_duration: 30
+
     environment:
       flutter: 3.24.0
       java: 17
       vars:
         CACHE_INVALIDATOR: 2
+        # Ensures Gradle uses Java 17 even if runner has multiple JDKs
+        GRADLE_OPTS: "-Dorg.gradle.java.home=$JAVA_HOME"
+
     scripts:
+      - name: Verify Environment (Java/Flutter)
+        script: |
+          echo "JAVA_HOME=$JAVA_HOME"
+          java -version
+          flutter --version
+
       - name: Preparation and Clean
-        script: | 
-          rm -rf build
-          rm -rf .dart_tool
+        script: |
           flutter clean
           flutter pub get
+
+          # Make sure gradlew is executable (mac runners sometimes need this)
+          chmod +x android/gradlew
+
+          # Force Gradle to use Java 17 (hard pin)
+          mkdir -p android
+          cat >> android/gradle.properties <<'EOF'
+          org.gradle.jvmargs=-Xmx4096m -Dfile.encoding=UTF-8
+          kotlin.daemon.jvmargs=-Xmx2048m
+          org.gradle.java.home=${JAVA_HOME}
+          EOF
+
           cd android
-          ./gradlew clean
+          ./gradlew clean --no-daemon
           cd ..
+
       - name: Build App Bundle
-        script: | 
+        script: |
           flutter build appbundle --release --no-tree-shake-icons
+
     artifacts:
       - build/app/outputs/bundle/release/*.aab
